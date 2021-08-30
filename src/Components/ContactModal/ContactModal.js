@@ -12,14 +12,12 @@ export const ContactModal = ({ submit }) => {
 
   const [isValid, setIsValid] = useState(false);
 
+  const [formDirty, setFormDirty] = useState(false);
+
   useEffect(() => {
-    // setIsValid(
-    //   !!name &&
-    //     !!phone &&
-    //     !!email &&
-    //     /^[0-9]{3}-[0-9]{3}-[0-9]{4}/.test(phone) &&
-    //     /^\w+([.-]?w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email),
-    // );
+    if (!formDirty) {
+      return;
+    }
 
     setNameError('');
     setPhoneError('');
@@ -47,11 +45,12 @@ export const ContactModal = ({ submit }) => {
     })();
 
     setIsValid(_valid);
-  }, [name, phone, email]);
+  }, [name, phone, email, formDirty]);
 
   return (
     <div className={styles.main}>
       <form
+        data-testid="contact-modal-form"
         onSubmit={e => {
           e.preventDefault();
           if (isValid) {
@@ -65,7 +64,10 @@ export const ContactModal = ({ submit }) => {
             required
             value={name}
             placeholder="Name"
-            onChange={e => setName(e.target.value)}
+            onChange={e => {
+              setName(e.target.value);
+              setFormDirty(true);
+            }}
           />
           {!!nameError && (
             <div data-testid="error" className={styles.error}>
@@ -79,7 +81,10 @@ export const ContactModal = ({ submit }) => {
             required
             value={phone}
             placeholder="Phone Number"
-            onChange={e => setPhone(e.target.value)}
+            onChange={e => {
+              setPhone(e.target.value);
+              setFormDirty(true);
+            }}
           />
           {!!phoneError && (
             <div data-testid="error" className={styles.error}>
@@ -93,7 +98,10 @@ export const ContactModal = ({ submit }) => {
             required
             value={email}
             placeholder="Email Address"
-            onChange={e => setEmail(e.target.value)}
+            onChange={e => {
+              setEmail(e.target.value);
+              setFormDirty(true);
+            }}
           />
           {!!emailError && (
             <div data-testid="error" className={styles.error}>
