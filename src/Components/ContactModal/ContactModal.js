@@ -10,42 +10,50 @@ export const ContactModal = ({ submit }) => {
   const [phoneError, setPhoneError] = useState('');
   const [emailError, setEmailError] = useState('');
 
+  const [nameDirty, setNameDirty] = useState(false);
+  const [phoneDirty, setPhoneDirty] = useState(false);
+  const [emailDirty, setEmailDirty] = useState(false);
+
   const [isValid, setIsValid] = useState(false);
 
-  const [formDirty, setFormDirty] = useState(false);
-
   useEffect(() => {
-    if (!formDirty) {
-      return;
-    }
-
     setNameError('');
     setPhoneError('');
     setEmailError('');
 
     let _valid = (() => {
       if (!name) {
-        setNameError('Name is Required');
         return false;
       } else if (!phone) {
-        setPhoneError('Phone is Required');
         return false;
       } else if (!email) {
-        setEmail('Email is Required');
         return false;
       } else if (!/^[0-9]{3}-[0-9]{3}-[0-9]{4}/.test(phone)) {
-        setPhoneError('Phone is improperly formatted');
         return false;
       } else if (!/^\w+([.-]?w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-        setEmailError('Email is improperly formatted');
         return false;
       } else {
         return true;
       }
     })();
 
+    if (nameDirty && !name) {
+      setNameError('Name is Required');
+    } else if (phoneDirty && !phone) {
+      setPhoneError('Phone is Required');
+    } else if (emailDirty && !email) {
+      setEmail('Email is Required');
+    } else if (phoneDirty && !/^[0-9]{3}-[0-9]{3}-[0-9]{4}/.test(phone)) {
+      setPhoneError('Phone is improperly formatted');
+    } else if (
+      emailDirty &&
+      !/^\w+([.-]?w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)
+    ) {
+      setEmailError('Email is improperly formatted');
+    }
+
     setIsValid(_valid);
-  }, [name, phone, email, formDirty]);
+  }, [name, phone, email, nameDirty, phoneDirty, emailDirty]);
 
   return (
     <div className={styles.main}>
@@ -66,7 +74,7 @@ export const ContactModal = ({ submit }) => {
             placeholder="Name"
             onChange={e => {
               setName(e.target.value);
-              setFormDirty(true);
+              setNameDirty(true);
             }}
           />
           {!!nameError && (
@@ -83,7 +91,7 @@ export const ContactModal = ({ submit }) => {
             placeholder="Phone Number"
             onChange={e => {
               setPhone(e.target.value);
-              setFormDirty(true);
+              setPhoneDirty(true);
             }}
           />
           {!!phoneError && (
@@ -100,7 +108,7 @@ export const ContactModal = ({ submit }) => {
             placeholder="Email Address"
             onChange={e => {
               setEmail(e.target.value);
-              setFormDirty(true);
+              setEmailDirty(true);
             }}
           />
           {!!emailError && (

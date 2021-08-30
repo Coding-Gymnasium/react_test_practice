@@ -1,5 +1,5 @@
 import { ContactModal } from './ContactModal/ContactModal';
 
 export const App = () => {
-  return <ContactModal onSubmit={() => console.log('Submit!')} />;
+  return <ContactModal submit={() => console.log('Submit!')} />;
 };

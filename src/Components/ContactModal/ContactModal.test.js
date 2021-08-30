@@ -33,8 +33,16 @@ test('Enables submit button once form is valid', () => {
   const submitButton = screen.getByText('Submit');
 
   fireEvent.change(nameInput, { target: { value: 'Port Exe' } });
+
+  expect(screen.queryByTestId('error')).not.toBeInTheDocument();
+
   fireEvent.change(phoneInput, { target: { value: '123-456-7890' } });
+
+  expect(screen.queryByTestId('error')).not.toBeInTheDocument();
+
   fireEvent.change(emailInput, { target: { value: '123@gmail.com' } });
+
+  expect(screen.queryByTestId('error')).not.toBeInTheDocument();
 
   expect(submitButton).not.toBeDisabled();
 });
