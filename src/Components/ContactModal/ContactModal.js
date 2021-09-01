@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import styles from './styles.module.css';
 
-export const ContactModal = ({ submit }) => {
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
+export const ContactModal = ({ submit, contact }) => {
+  const [name, setName] = useState(contact?.name || '');
+  const [phone, setPhone] = useState(contact?.phone || '');
+  const [email, setEmail] = useState(contact?.email || '');
 
   const [nameError, setNameError] = useState('');
   const [phoneError, setPhoneError] = useState('');

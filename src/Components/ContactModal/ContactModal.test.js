@@ -1,6 +1,37 @@
 import { render, screen, cleanup, fireEvent } from '@testing-library/react';
 import { ContactModal } from './ContactModal';
 
+describe('Edit Contact', () => {
+  test('Initializes form with contact info', () => {
+    render(
+      <ContactModal
+        contact={{
+          name: 'Joe',
+          phone: '987-654-3210',
+          email: 'test@gmail.com',
+        }}
+      />,
+    );
+
+    const nameInput = screen.getByPlaceholderText('Name');
+    const phoneInput = screen.getByPlaceholderText('Phone Number');
+    const emailInput = screen.getByPlaceholderText('Email Address');
+    const submitButton = screen.getByText('Submit');
+
+    expect(nameInput).toBeInTheDocument();
+    expect(phoneInput).toBeInTheDocument();
+    expect(emailInput).toBeInTheDocument();
+
+    expect(nameInput).toHaveValue('Joe');
+    expect(phoneInput).toHaveValue('987-654-3210');
+    expect(emailInput).toHaveValue('test@gmail.com');
+
+    expect(screen.queryByTestId('error')).not.toBeInTheDocument();
+
+    expect(submitButton).not.toBeDisabled();
+  });
+});
+
 describe('Create Contact', () => {
   test('Initializes empty form', () => {
     render(<ContactModal />);
