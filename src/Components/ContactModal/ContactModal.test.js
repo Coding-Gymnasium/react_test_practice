@@ -1,4 +1,9 @@
-import { render, screen, cleanup, fireEvent } from '@testing-library/react';
+import {
+  render,
+  screen,
+  cleanup,
+  fireEvent,
+} from '@testing-library/react';
 import { ContactModal } from './ContactModal';
 
 describe('Edit Contact', () => {
@@ -66,11 +71,15 @@ describe('Create Contact', () => {
 
     expect(screen.queryByTestId('error')).not.toBeInTheDocument();
 
-    fireEvent.change(phoneInput, { target: { value: '123-456-7890' } });
+    fireEvent.change(phoneInput, {
+      target: { value: '123-456-7890' },
+    });
 
     expect(screen.queryByTestId('error')).not.toBeInTheDocument();
 
-    fireEvent.change(emailInput, { target: { value: '123@gmail.com' } });
+    fireEvent.change(emailInput, {
+      target: { value: '123@gmail.com' },
+    });
 
     expect(screen.queryByTestId('error')).not.toBeInTheDocument();
 
@@ -86,7 +95,9 @@ describe('Create Contact', () => {
     const submitButton = screen.getByText('Submit');
 
     fireEvent.change(nameInput, { target: { value: 'Port Exe' } });
-    fireEvent.change(phoneInput, { target: { value: '123-456-7890' } });
+    fireEvent.change(phoneInput, {
+      target: { value: '123-456-7890' },
+    });
     fireEvent.change(emailInput, { target: { value: '123' } });
 
     expect(submitButton).toBeDisabled();
@@ -105,21 +116,31 @@ describe('Create Contact', () => {
 
     // email error
     fireEvent.change(nameInput, { target: { value: 'Port Exe' } });
-    fireEvent.change(phoneInput, { target: { value: '123-456-7890' } });
+    fireEvent.change(phoneInput, {
+      target: { value: '123-456-7890' },
+    });
     fireEvent.change(emailInput, { target: { value: '123' } });
 
     let errorDiv = screen.queryByTestId('error');
 
-    expect(errorDiv).toHaveTextContent('Email is improperly formatted');
+    expect(errorDiv).toHaveTextContent(
+      'Email is improperly formatted',
+    );
 
     // phone error
     fireEvent.change(phoneInput, { target: { value: '1234567890' } });
-    fireEvent.change(emailInput, { target: { value: '123@gmail.com' } });
+    fireEvent.change(emailInput, {
+      target: { value: '123@gmail.com' },
+    });
 
     errorDiv = screen.queryByTestId('error');
-    expect(errorDiv).toHaveTextContent('Phone is improperly formatted');
+    expect(errorDiv).toHaveTextContent(
+      'Phone is improperly formatted',
+    );
 
-    fireEvent.change(phoneInput, { target: { value: '123-456-7890' } });
+    fireEvent.change(phoneInput, {
+      target: { value: '123-456-7890' },
+    });
     errorDiv = screen.queryByTestId('error');
     expect(errorDiv).not.toBeInTheDocument();
   });
@@ -136,17 +157,30 @@ describe('Create Contact', () => {
     const form = screen.getByTestId('contact-modal-form');
 
     fireEvent.change(nameInput, { target: { value: 'Port Exe' } });
-    fireEvent.change(phoneInput, { target: { value: '123-456-7890' } });
+    fireEvent.change(phoneInput, {
+      target: { value: '123-456-7890' },
+    });
     fireEvent.change(emailInput, { target: { value: '123@gmail.' } });
 
     expect(submitButton).toBeDisabled();
     fireEvent.submit(form);
     expect(onSubmit).not.toHaveBeenCalled();
 
-    fireEvent.change(emailInput, { target: { value: '123@gmail.com' } });
+    fireEvent.change(emailInput, {
+      target: { value: '123@gmail.com' },
+    });
 
     expect(submitButton).not.toBeDisabled();
     fireEvent.submit(form);
     expect(onSubmit).toHaveBeenCalled();
+  });
+
+  test('Calls cancel when cancel button is clicked', () => {
+    const cancelFn = jest.fn();
+    render(<ContactModal cancel={cancelFn} />);
+
+    const cancelBtn = screen.getByText('Cancel');
+    fireEvent.click(cancelBtn);
+    expect(cancelFn).toHaveBeenCalled();
   });
 });

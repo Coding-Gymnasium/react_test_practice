@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './styles.module.css';
 
-export const ContactModal = ({ submit, contact }) => {
+export const ContactModal = ({ cancel, submit, contact }) => {
   const [name, setName] = useState(contact?.name || '');
   const [phone, setPhone] = useState(contact?.phone || '');
   const [email, setEmail] = useState(contact?.email || '');
@@ -30,7 +30,9 @@ export const ContactModal = ({ submit, contact }) => {
         return false;
       } else if (!/^[0-9]{3}-[0-9]{3}-[0-9]{4}/.test(phone)) {
         return false;
-      } else if (!/^\w+([.-]?w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      } else if (
+        !/^\w+([.-]?w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)
+      ) {
         return false;
       } else {
         return true;
@@ -43,7 +45,10 @@ export const ContactModal = ({ submit, contact }) => {
       setPhoneError('Phone is Required');
     } else if (emailDirty && !email) {
       setEmail('Email is Required');
-    } else if (phoneDirty && !/^[0-9]{3}-[0-9]{3}-[0-9]{4}/.test(phone)) {
+    } else if (
+      phoneDirty &&
+      !/^[0-9]{3}-[0-9]{3}-[0-9]{4}/.test(phone)
+    ) {
       setPhoneError('Phone is improperly formatted');
     } else if (
       emailDirty &&
@@ -119,6 +124,9 @@ export const ContactModal = ({ submit, contact }) => {
         </div>
 
         <button disabled={!isValid}>Submit</button>
+        <button data-testid="cancel" type="button" onClick={cancel}>
+          Cancel
+        </button>
       </form>
     </div>
   );
