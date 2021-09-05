@@ -11,7 +11,10 @@ export const App = () => {
       {addingContact && (
         <ContactModal
           cancel={() => setAddingContact(false)}
-          sumbit={() => console.log('Submit!')}
+          submit={c => {
+            console.log(c);
+            setAddingContact(false);
+          }}
         />
       )}
       <button
