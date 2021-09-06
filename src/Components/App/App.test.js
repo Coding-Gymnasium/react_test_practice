@@ -1,6 +1,42 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { App } from './';
 
+const joe = {
+  id: 0,
+  name: 'Joe',
+  email: 'joe@gmail.com',
+  phone: '303-333-3333',
+};
+const bob = {
+  id: 1,
+  name: 'Bob',
+  email: 'bob@gmail.com',
+  phone: '303-333-3333',
+};
+
+const addContact = c => {
+  const addContactBtn = screen.getByTestId('add-contact-btn');
+
+  fireEvent.click(addContactBtn);
+
+  expect(
+    screen.getByTestId('contact-modal-form'),
+  ).toBeInTheDocument();
+
+  const nameInput = screen.getByPlaceholderText('Name');
+  const phoneInput = screen.getByPlaceholderText('Phone Number');
+  const emailInput = screen.getByPlaceholderText('Email Address');
+  const form = screen.getByTestId('contact-modal-form');
+
+  fireEvent.change(nameInput, { target: { value: c.name } });
+  fireEvent.change(phoneInput, { target: { value: c.phone } });
+  fireEvent.change(emailInput, {
+    target: { value: c.email },
+  });
+
+  fireEvent.submit(form);
+};
+
 test('Shows contact modal when add contact button is clicked', () => {
   render(<App />);
 
@@ -47,26 +83,7 @@ test('Closes modal automatically after submit', () => {
     screen.queryByTestId('contact-modal-form'),
   ).not.toBeInTheDocument();
 
-  const addContactBtn = screen.getByTestId('add-contact-btn');
-
-  fireEvent.click(addContactBtn);
-
-  expect(
-    screen.getByTestId('contact-modal-form'),
-  ).toBeInTheDocument();
-
-  const nameInput = screen.getByPlaceholderText('Name');
-  const phoneInput = screen.getByPlaceholderText('Phone Number');
-  const emailInput = screen.getByPlaceholderText('Email Address');
-  const form = screen.getByTestId('contact-modal-form');
-
-  fireEvent.change(phoneInput, { target: { value: '123-456-7890' } });
-  fireEvent.change(nameInput, { target: { value: 'Port Exe' } });
-  fireEvent.change(emailInput, {
-    target: { value: '123@gmail.com' },
-  });
-
-  fireEvent.submit(form);
+  addContact(joe);
 
   expect(
     screen.queryByTestId('contact-modal-form'),
@@ -84,6 +101,10 @@ describe('Local Storage Logic', () => {
     });
   });
 
+  test('Properly manages teh deletion of contacts', () => {
+    render(<App />);
+  });
+
   test('Initializes empty array in localStorage if no contacts are stored yet', () => {
     render(<App />);
     expect(window.localStorage.setItem).toHaveBeenCalledWith(
@@ -93,17 +114,6 @@ describe('Local Storage Logic', () => {
   });
 
   test('Properly stores submitted users', () => {
-    const joe = {
-      name: 'Joe',
-      email: 'joe@gmail.com',
-      phone: '303-333-3333',
-    };
-    const bob = {
-      name: 'Bob',
-      email: 'bob@gmail.com',
-      phone: '303-333-3333',
-    };
-
     render(<App />);
 
     expect(
@@ -118,18 +128,7 @@ describe('Local Storage Logic', () => {
       screen.getByTestId('contact-modal-form'),
     ).toBeInTheDocument();
 
-    let nameInput = screen.getByPlaceholderText('Name');
-    let phoneInput = screen.getByPlaceholderText('Phone Number');
-    let emailInput = screen.getByPlaceholderText('Email Address');
-    let form = screen.getByTestId('contact-modal-form');
-
-    fireEvent.change(phoneInput, { target: { value: joe.phone } });
-    fireEvent.change(nameInput, { target: { value: joe.name } });
-    fireEvent.change(emailInput, {
-      target: { value: joe.email },
-    });
-
-    fireEvent.submit(form);
+    addContact(joe);
 
     expect(
       screen.queryByTestId('contact-modal-form'),
@@ -146,18 +145,7 @@ describe('Local Storage Logic', () => {
       screen.getByTestId('contact-modal-form'),
     ).toBeInTheDocument();
 
-    nameInput = screen.getByPlaceholderText('Name');
-    phoneInput = screen.getByPlaceholderText('Phone Number');
-    emailInput = screen.getByPlaceholderText('Email Address');
-    form = screen.getByTestId('contact-modal-form');
-
-    fireEvent.change(phoneInput, { target: { value: bob.phone } });
-    fireEvent.change(nameInput, { target: { value: bob.name } });
-    fireEvent.change(emailInput, {
-      target: { value: bob.email },
-    });
-
-    fireEvent.submit(form);
+    addContact(bob);
 
     expect(
       screen.queryByTestId('contact-modal-form'),

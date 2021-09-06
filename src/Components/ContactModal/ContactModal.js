@@ -67,7 +67,7 @@ export const ContactModal = ({ cancel, submit, contact }) => {
         onSubmit={e => {
           e.preventDefault();
           if (isValid) {
-            submit({ name, email, phone });
+            submit({ id, name, email, phone });
           } else {
           }
         }}
