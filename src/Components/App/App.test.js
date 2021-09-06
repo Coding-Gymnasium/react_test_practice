@@ -2,13 +2,11 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { App } from './';
 
 const joe = {
-  id: 0,
   name: 'Joe',
   email: 'joe@gmail.com',
   phone: '303-333-3333',
 };
 const bob = {
-  id: 1,
   name: 'Bob',
   email: 'bob@gmail.com',
   phone: '303-333-3333',
